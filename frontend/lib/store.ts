@@ -19,7 +19,7 @@ export const useVibeStore = create<VibeState>()(
   persist(
     (set) => ({
       setSession: (session) => set({ session }),
-      setEmotion: (emotion) => set({ emotion }),
+      setEmotion: (emotion) => set({ emotion, roomId: undefined }),
       setRoomId: (roomId) => set({ roomId }),
       reset: () => set({ emotion: undefined, roomId: undefined }),
     }),

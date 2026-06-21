@@ -5,7 +5,7 @@ from sqlmodel import Session, select
 from app.db import get_session
 from app.models import EmotionProfile
 from app.services.emotion import analyze_emotion, save_emotion
-from app.state import session_emotions
+from app.state import reset_session_journey, session_emotions
 
 router = APIRouter(prefix="/api/emotion", tags=["emotion"])
 
@@ -17,6 +17,7 @@ class AnalyzeRequest(BaseModel):
 
 @router.post("/analyze")
 async def analyze(request: AnalyzeRequest, db: Session = Depends(get_session)) -> dict:
+    reset_session_journey(request.session_id)
     result = await analyze_emotion(request.text)
     profile = save_emotion(db, request.session_id, request.text, result)
     session_emotions[request.session_id] = result
