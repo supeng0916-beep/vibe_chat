@@ -112,8 +112,9 @@ async def websocket_endpoint(websocket: WebSocket, session_id: str) -> None:
                     room_id, {"type": "typing", "session_id": session_id}, exclude=session_id
                 )
     except WebSocketDisconnect:
-        manager.disconnect(session_id)
-        if room_id:
+        # Only broadcast departure if this was the session's live socket
+        # (a stale socket from a previous page must not evict the current one).
+        if manager.disconnect(session_id, websocket) and room_id:
             await manager.broadcast_room(
                 room_id, {"type": "system", "event": "partner_left", "session_id": session_id}, exclude=session_id
             )
