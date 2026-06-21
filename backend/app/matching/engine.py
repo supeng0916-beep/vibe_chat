@@ -32,8 +32,9 @@ class MatchingEngine:
 
         def score(item: WaitingUser) -> float:
             if mode == "complementary":
-                # Opposite valence, similar arousal: "让开心的人陪陪低落的人".
-                return self._weighted(emotion.valence + item.emotion.valence, emotion.arousal - item.emotion.arousal)
+                # Complementarity is mainly about opposite valence; differing
+                # arousal is expected, so weight the arousal gap much lighter.
+                return self._weighted(emotion.valence + item.emotion.valence, (emotion.arousal - item.emotion.arousal) * 0.4)
             return self.distance(emotion, item.emotion)
 
         best = min(candidates, key=score)
