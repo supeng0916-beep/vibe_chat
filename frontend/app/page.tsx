@@ -20,12 +20,21 @@ export default function HomePage() {
   const [text, setText] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [hydrated, setHydrated] = useState(false);
+
+  // Wait for the persisted store to rehydrate before deciding to create a
+  // session — otherwise a page reload spawns a fresh anonymous identity and
+  // fragments the user's emotion history.
+  useEffect(() => {
+    setHydrated(useVibeStore.persist.hasHydrated());
+    return useVibeStore.persist.onFinishHydration(() => setHydrated(true));
+  }, []);
 
   useEffect(() => {
-    if (!session) {
+    if (hydrated && !session) {
       api.createSession().then(setSession).catch(() => setError("创建匿名身份失败，请确认后端已启动。"));
     }
-  }, [session, setSession]);
+  }, [hydrated, session, setSession]);
 
   async function submit(event: FormEvent) {
     event.preventDefault();
