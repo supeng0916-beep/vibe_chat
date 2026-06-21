@@ -2,6 +2,13 @@
 
 VibeChat 是一个 AI 驱动的情绪社交 Web 应用：用户输入当下心情，系统分析情绪标签、效价 valence、唤醒度 arousal 和强度，再用 VA 情绪向量匹配同频匿名用户，进入实时匿名聊天。
 
+## 🌐 线上演示
+
+- 前端（Vercel）：**https://vibe-chat-psi.vercel.app**
+- 后端 API（Render）：https://vibechat-api-jx7z.onrender.com
+
+> 后端为 Render 免费档，闲置约 15 分钟会休眠，首次访问需等待 ~30-50 秒唤醒。演示前可先打开 `https://vibechat-api-jx7z.onrender.com/api/health` 预热。
+
 ## 功能
 
 - 情绪输入与 AI/降级词典分析，返回标签、解释、关键词、强度、正负向和情绪颜色。
@@ -87,7 +94,7 @@ NEXT_PUBLIC_API_URL=https://your-render-api.onrender.com
 NEXT_PUBLIC_WS_URL=wss://your-render-api.onrender.com
 ```
 
-线上演示地址：部署完成后填写。
+线上演示地址：https://vibe-chat-psi.vercel.app
 
 ## 100 字以内产品介绍
 
