@@ -48,3 +48,16 @@ export type SystemEvent = {
   session_id?: string;
   distance?: number;
 };
+
+export type EmotionHistoryItem = {
+  id: string;
+  valence: number;
+  arousal: number;
+  intensity: number;
+  primary_emotion: string;
+  color: string;
+  emotion_emoji: string;
+  raw_text: string;
+  explanation: string;
+  created_at: string;
+};

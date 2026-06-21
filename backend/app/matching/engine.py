@@ -19,21 +19,32 @@ class MatchingEngine:
     def remove(self, session_id: str) -> None:
         self._queue = [item for item in self._queue if item.session_id != session_id]
 
-    def find_match(self, session_id: str, emotion: EmotionResult, threshold: float | None = None) -> MatchResult | None:
+    def find_match(
+        self,
+        session_id: str,
+        emotion: EmotionResult,
+        threshold: float | None = None,
+        mode: str = "similar",
+    ) -> MatchResult | None:
         candidates = [item for item in self._queue if item.session_id != session_id]
         if not candidates:
             return None
 
-        best = min(candidates, key=lambda item: self.distance(emotion, item.emotion))
-        best_distance = self.distance(emotion, best.emotion)
-        if best_distance > (threshold if threshold is not None else self.strict_threshold):
+        def score(item: WaitingUser) -> float:
+            if mode == "complementary":
+                # Opposite valence, similar arousal: "让开心的人陪陪低落的人".
+                return self._weighted(emotion.valence + item.emotion.valence, emotion.arousal - item.emotion.arousal)
+            return self.distance(emotion, item.emotion)
+
+        best = min(candidates, key=score)
+        if score(best) > (threshold if threshold is not None else self.strict_threshold):
             return None
 
         self._queue = [item for item in self._queue if item.session_id != best.session_id]
-        return MatchResult(partner=best, distance=best_distance)
+        return MatchResult(partner=best, distance=self.distance(emotion, best.emotion))
+
+    def _weighted(self, dv: float, da: float) -> float:
+        return sqrt(self.valence_weight * dv**2 + self.arousal_weight * da**2)
 
     def distance(self, left: EmotionResult, right: EmotionResult) -> float:
-        return sqrt(
-            self.valence_weight * (left.valence - right.valence) ** 2
-            + self.arousal_weight * (left.arousal - right.arousal) ** 2
-        )
+        return self._weighted(left.valence - right.valence, left.arousal - right.arousal)

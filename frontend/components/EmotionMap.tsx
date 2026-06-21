@@ -12,6 +12,7 @@ type Props = {
   partner?: Point | null;
   variant?: "full" | "compact";
   showCandidates?: boolean;
+  scanning?: boolean;
 };
 
 const clamp = (n: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, n));
@@ -19,7 +20,15 @@ const clamp = (n: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, n
 const toX = (v: number) => clamp(50 + v * 42, 6, 94);
 const toY = (a: number) => clamp(92 - a * 84, 6, 94);
 
-export function EmotionMap({ valence, arousal, color, partner, variant = "full", showCandidates = false }: Props) {
+export function EmotionMap({
+  valence,
+  arousal,
+  color,
+  partner,
+  variant = "full",
+  showCandidates = false,
+  scanning = false,
+}: Props) {
   const compact = variant === "compact";
   const x = toX(valence);
   const y = toY(arousal);
@@ -108,6 +117,19 @@ export function EmotionMap({ valence, arousal, color, partner, variant = "full",
           </motion.div>
         </>
       )}
+
+      {/* scanning pulse rings emanating from your star */}
+      {scanning &&
+        [0, 1, 2].map((i) => (
+          <motion.span
+            key={`ring-${i}`}
+            className="absolute -translate-x-1/2 -translate-y-1/2 rounded-full border"
+            style={{ left: `${x}%`, top: `${y}%`, borderColor: color }}
+            initial={{ width: 12, height: 12, opacity: 0.5 }}
+            animate={{ width: 220, height: 220, opacity: 0 }}
+            transition={{ duration: 3, repeat: Infinity, delay: i * 1, ease: "easeOut" }}
+          />
+        ))}
 
       {/* you */}
       <motion.div

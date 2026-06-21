@@ -1,4 +1,4 @@
-import type { ChatMessage, EmotionResult, Member, SessionInfo } from "./types";
+import type { ChatMessage, EmotionHistoryItem, EmotionResult, Member, SessionInfo } from "./types";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
 
@@ -49,4 +49,6 @@ export const api = {
       body: JSON.stringify({ room_id: roomId }),
     }),
   config: () => request<{ provider: string; model: string }>("/api/config"),
+  history: (sessionId: string) =>
+    request<EmotionHistoryItem[]>(`/api/emotion/history?session_id=${encodeURIComponent(sessionId)}`),
 };

@@ -15,7 +15,7 @@ function MatchingInner() {
   const params = useSearchParams();
   const mode = params.get("mode") ?? "similar";
   const { session, emotion, setRoomId } = useVibeStore();
-  const [status, setStatus] = useState("正在情绪星图中寻找与你同频的人…");
+  const [status, setStatus] = useState("正在星图里，找此刻和你同频的人…");
   const [elapsed, setElapsed] = useState(0);
   const doneRef = useRef(false);
 
@@ -63,7 +63,7 @@ function MatchingInner() {
 
     const fallback = window.setTimeout(async () => {
       if (doneRef.current) return;
-      setStatus("此刻没有完全同频的人在线，正在为你唤起一位同频陪伴…");
+      setStatus("此刻没遇到刚好同频的人，先让一个懂你的人陪你坐会儿…");
       try {
         const result = await api.matchFallback(sessionId, mode);
         if (result.room_id) go(result.room_id);
@@ -89,7 +89,7 @@ function MatchingInner() {
         className="w-full"
       >
         {emotion ? (
-          <EmotionMap valence={emotion.valence} arousal={emotion.arousal} color={emotion.color} showCandidates />
+          <EmotionMap valence={emotion.valence} arousal={emotion.arousal} color={emotion.color} showCandidates scanning />
         ) : null}
 
         <div className="mt-7 text-center">
@@ -105,9 +105,11 @@ function MatchingInner() {
           </div>
           <h1 className="font-display text-2xl text-ink">{status}</h1>
           <p className="mt-3 text-sm text-dim">
-            匹配依据是效价与唤醒度的加权距离——这不是随机聊天室。
+            {mode === "complementary"
+              ? "我们在帮你找一个情绪正好相反、能接住你的人。"
+              : "我们是顺着你此刻的情绪去找人的，不是把你丢进一个聊天室。"}
           </p>
-          <p className="mt-1 text-xs text-faint">已等待 {elapsed}s · {mode === "complementary" ? "互补陪伴" : "同频共振"}模式</p>
+          <p className="mt-1 text-xs text-faint">已等待 {elapsed}s · {mode === "complementary" ? "互补陪伴" : "同频共振"}</p>
         </div>
       </motion.div>
     </main>

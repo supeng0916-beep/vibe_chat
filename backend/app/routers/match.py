@@ -50,7 +50,7 @@ async def match(request: MatchRequest, db: Session = Depends(get_session)) -> di
     if emotion is None:
         raise HTTPException(status_code=400, detail="请先完成情绪分析")
 
-    found = matching_engine.find_match(request.session_id, emotion)
+    found = matching_engine.find_match(request.session_id, emotion, mode=request.mode)
     if found:
         room_id = await _pair_room(db, request.mode, request.session_id, found.partner.session_id, found.distance)
         return {"status": "matched", "room_id": room_id, "distance": found.distance}
@@ -69,7 +69,7 @@ async def fallback(request: MatchRequest, db: Session = Depends(get_session)) ->
     if emotion is None:
         raise HTTPException(status_code=400, detail="请先完成情绪分析")
 
-    found = matching_engine.find_match(request.session_id, emotion, threshold=RELAXED_THRESHOLD)
+    found = matching_engine.find_match(request.session_id, emotion, threshold=RELAXED_THRESHOLD, mode=request.mode)
     if found:
         room_id = await _pair_room(db, request.mode, request.session_id, found.partner.session_id, found.distance)
         return {"status": "matched", "room_id": room_id, "distance": found.distance, "fallback": "relaxed"}

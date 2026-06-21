@@ -157,7 +157,7 @@ export default function ChatPage() {
               className="panel inline-flex h-9 items-center gap-1.5 rounded-full px-3 text-xs text-dim transition hover:text-ink disabled:opacity-50"
             >
               <Sparkles className="h-3.5 w-3.5" />
-              {icebreaking ? "生成中…" : "AI 破冰"}
+              {icebreaking ? "想词中…" : "帮我起个头"}
             </button>
           </header>
 
@@ -165,8 +165,8 @@ export default function ChatPage() {
             {messages.length === 0 ? (
               <div className="flex h-full flex-col items-center justify-center text-center text-faint">
                 <div className="mb-2 text-3xl">🫧</div>
-                <p className="text-sm">房间已就绪。先发一句此刻最真实的话，</p>
-                <p className="text-sm">或点右上角让 AI 帮你破冰。</p>
+                <p className="text-sm">这里只有你们俩，没人知道你是谁。</p>
+                <p className="text-sm">先说一句此刻最想说的，或者让我帮你起个头。</p>
               </div>
             ) : (
               <AnimatePresence initial={false}>

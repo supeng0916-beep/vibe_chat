@@ -2,12 +2,15 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { LineChart } from "lucide-react";
 import { api } from "@/lib/api";
+import { useVibeStore } from "@/lib/store";
 
 /** Top brand bar with a live provider badge — surfaces the OpenAI/Anthropic
  *  dual-standard adapter to judges at a glance. */
 export function TopBar() {
   const [provider, setProvider] = useState<{ provider: string; model: string } | null>(null);
+  const session = useVibeStore((s) => s.session);
 
   useEffect(() => {
     api.config().then(setProvider).catch(() => setProvider(null));
@@ -19,12 +22,22 @@ export function TopBar() {
         <span className="h-2.5 w-2.5 rounded-full bg-emotion shadow-glow-sm animate-breathe" />
         <span className="font-display text-lg tracking-wide text-ink">VibeChat</span>
       </Link>
-      {provider ? (
-        <div className="panel flex items-center gap-2 rounded-full px-3 py-1.5 text-xs text-dim">
-          <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
-          {provider.provider === "anthropic" ? "Anthropic" : "OpenAI"} 标准 · {provider.model}
-        </div>
-      ) : null}
+      <div className="flex items-center gap-2.5">
+        {session ? (
+          <Link
+            href="/history"
+            className="panel inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs text-dim transition hover:text-ink"
+          >
+            <LineChart className="h-3.5 w-3.5" /> 情绪轨迹
+          </Link>
+        ) : null}
+        {provider ? (
+          <div className="panel flex items-center gap-2 rounded-full px-3 py-1.5 text-xs text-dim">
+            <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
+            {provider.provider === "anthropic" ? "Anthropic" : "OpenAI"} 标准 · {provider.model}
+          </div>
+        ) : null}
+      </div>
     </header>
   );
 }

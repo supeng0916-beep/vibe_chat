@@ -72,7 +72,7 @@ export default function EmotionPage() {
 
           {emotion.degraded ? (
             <p className="mt-5 rounded-xl border border-amber-300/20 bg-amber-400/10 px-3 py-2 text-xs text-amber-200">
-              外部模型暂时不可用，已切换本地降级分析——核心流程依然稳定可演示。
+              此刻先用了更稳的本地方式读你的情绪，不影响你继续往下走。
             </p>
           ) : null}
           {emotion.safety_flag ? <div className="mt-5"><SafetyBanner /></div> : null}

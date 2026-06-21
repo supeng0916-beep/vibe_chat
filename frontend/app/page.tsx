@@ -62,16 +62,16 @@ export default function HomePage() {
       >
         <span className="panel mb-6 inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs text-dim">
           <span className="h-1.5 w-1.5 rounded-full bg-emotion animate-breathe" />
-          AI 驱动的情绪社交
+          先被听见，再开始说
         </span>
         <h1 className="font-display text-4xl leading-[1.15] text-ink sm:text-6xl">
           此刻，<br className="sm:hidden" />
           <span style={{ color: "var(--emotion)" }}>你想被怎样理解？</span>
         </h1>
         <p className="mx-auto mt-6 max-w-xl text-base leading-8 text-dim sm:text-lg">
-          写下一段真实的心情。AI 把它解析成情绪坐标，
+          把心里正在发生的事写下来。
           <br className="hidden sm:block" />
-          再为你找到此刻同频的那个人，进入一段匿名对话。
+          我们会读懂它，帮你遇见此刻刚好同频的人。
         </p>
       </motion.div>
 
@@ -91,7 +91,7 @@ export default function HomePage() {
             placeholder="比如：今天面试前有点紧张，也有一点期待，想找个人聊聊…"
           />
           <div className="flex items-center justify-between gap-3 px-2 pb-1">
-            <span className="text-xs text-faint">{text.length} 字 · 越真实，匹配越准</span>
+            <span className="text-xs text-faint">{text.length} 字 · 写得越真，越容易遇见对的人</span>
             <button
               type="submit"
               disabled={loading || !text.trim()}
@@ -99,7 +99,7 @@ export default function HomePage() {
               style={{ background: "var(--emotion)" }}
             >
               {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <ArrowRight className="h-4 w-4" />}
-              {loading ? "正在读懂你…" : "生成情绪坐标"}
+              {loading ? "正在读懂你…" : "读懂此刻的我"}
             </button>
           </div>
         </div>

@@ -27,4 +27,6 @@ async def analyze(request: AnalyzeRequest, db: Session = Depends(get_session)) -
 
 @router.get("/history")
 def history(session_id: str, db: Session = Depends(get_session)) -> list[EmotionProfile]:
-    return db.exec(select(EmotionProfile).where(EmotionProfile.session_id == session_id)).all()
+    return db.exec(
+        select(EmotionProfile).where(EmotionProfile.session_id == session_id).order_by(EmotionProfile.created_at)
+    ).all()
